@@ -43,7 +43,6 @@ namespace Game.Scripts.Player
         {
             _input = new PlayerInputAction();
             _input.Enable();
-            _input.Player.Movement.performed += Movement_performed;
 
             _controller = GetComponent<CharacterController>();
 
@@ -54,11 +53,6 @@ namespace Game.Scripts.Player
 
             if (_anim == null)
                 Debug.Log("Failed to connect the Animator");
-        }
-
-        private void Movement_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            //Movement
         }
 
         private void Update()

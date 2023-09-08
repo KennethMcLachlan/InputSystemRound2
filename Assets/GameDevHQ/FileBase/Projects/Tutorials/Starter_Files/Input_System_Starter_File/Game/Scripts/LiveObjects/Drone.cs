@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Game.Scripts.UI;
+using UnityEngine.UIElements;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -30,10 +31,18 @@ namespace Game.Scripts.LiveObjects
         public static event Action OnEnterFlightMode;
         public static event Action onExitFlightmode;
 
+        private PlayerInputAction _input;
+
+        private Vector3 _movement;
+
+        private float _rotate;
+
         private void OnEnable()
         {
             InteractableZone.onZoneInteractionComplete += EnterFlightMode;
+            _input = new PlayerInputAction();
         }
+
 
         private void EnterFlightMode(InteractableZone zone)
         {
@@ -42,6 +51,7 @@ namespace Game.Scripts.LiveObjects
                 _propAnim.SetTrigger("StartProps");
                 _droneCam.Priority = 11;
                 _inFlightMode = true;
+                _input.Enable();
                 OnEnterFlightMode?.Invoke();
                 UIManager.Instance.DroneView(true);
                 _interactableZone.CompleteTask(4);
@@ -52,17 +62,22 @@ namespace Game.Scripts.LiveObjects
         {            
             _droneCam.Priority = 9;
             _inFlightMode = false;
+            _input.Disable();
             UIManager.Instance.DroneView(false);            
         }
 
         private void Update()
         {
+            var escape = _input.Interaction.Escape.WasPressedThisFrame();
+            _movement = _input.Drone.Movement.ReadValue<Vector3>();
+            _rotate = _input.Drone.Rotate.ReadValue<float>();
+
             if (_inFlightMode)
             {
                 CalculateTilt();
                 CalculateMovementUpdate();
 
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (escape)
                 {
                     _inFlightMode = false;
                     onExitFlightmode?.Invoke();
@@ -80,13 +95,13 @@ namespace Game.Scripts.LiveObjects
 
         private void CalculateMovementUpdate()
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (_rotate < 0) //Replace / rotateddd
             {
                 var tempRot = transform.localRotation.eulerAngles;
                 tempRot.y -= _speed / 3;
                 transform.localRotation = Quaternion.Euler(tempRot);
             }
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (_rotate > 0) // Replace / rotateddd
             {
                 var tempRot = transform.localRotation.eulerAngles;
                 tempRot.y += _speed / 3;
@@ -97,11 +112,11 @@ namespace Game.Scripts.LiveObjects
         private void CalculateMovementFixedUpdate()
         {
             
-            if (Input.GetKey(KeyCode.Space))
+            if (_movement.y > 0) // Replaced
             {
                 _rigidbody.AddForce(transform.up * _speed, ForceMode.Acceleration);
             }
-            if (Input.GetKey(KeyCode.V))
+            if (_movement.y < 0) // Replaced
             {
                 _rigidbody.AddForce(-transform.up * _speed, ForceMode.Acceleration);
             }
@@ -109,13 +124,13 @@ namespace Game.Scripts.LiveObjects
 
         private void CalculateTilt()
         {
-            if (Input.GetKey(KeyCode.A)) 
+            if (_movement.x < 0) //REplaced
                 transform.rotation = Quaternion.Euler(00, transform.localRotation.eulerAngles.y, 30);
-            else if (Input.GetKey(KeyCode.D))
+            else if (_movement.x > 0) // Replaced
                 transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, -30);
-            else if (Input.GetKey(KeyCode.W))
+            else if (_movement.z > 0) // Replaced
                 transform.rotation = Quaternion.Euler(30, transform.localRotation.eulerAngles.y, 0);
-            else if (Input.GetKey(KeyCode.S))
+            else if (_movement.z < 0) //Replaced
                 transform.rotation = Quaternion.Euler(-30, transform.localRotation.eulerAngles.y, 0);
             else 
                 transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0);

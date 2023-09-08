@@ -77,16 +77,9 @@ namespace Game.Scripts.LiveObjects
             
             _input = new PlayerInputAction();
             _input.Enable();
-            _input.Interaction.KeyPress.performed += KeyPress_performed;
-
-            
 
         }
 
-        private void KeyPress_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            //Enter Key for Interactions
-        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -143,6 +136,7 @@ namespace Game.Scripts.LiveObjects
         private void Update()
         {
             var keyPress = _input.Interaction.KeyPress.WasPressedThisFrame();
+            var keyRelease = _input.Interaction.KeyPress.WasReleasedThisFrame();
 
             if (_inZone == true)
             {
@@ -185,7 +179,7 @@ namespace Game.Scripts.LiveObjects
                     }
                 }
 
-                if (keyPress && _keyState == KeyState.PressHold)
+                if (keyRelease && _keyState == KeyState.PressHold)
                 {
                     _inHoldState = false;
                     onHoldEnded?.Invoke(_zoneID);

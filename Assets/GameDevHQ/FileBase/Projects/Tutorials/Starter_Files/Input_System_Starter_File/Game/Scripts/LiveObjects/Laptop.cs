@@ -23,17 +23,30 @@ namespace Game.Scripts.LiveObjects
         public static event Action onHackComplete;
         public static event Action onHackEnded;
 
+        private PlayerInputAction _input;
+
+        private void Start()
+        {
+            
+        }
         private void OnEnable()
         {
             InteractableZone.onHoldStarted += InteractableZone_onHoldStarted;
             InteractableZone.onHoldEnded += InteractableZone_onHoldEnded;
+
+            _input = new PlayerInputAction();
+            _input.Enable();
+
         }
 
         private void Update()
         {
+            var enterKeyPress = _input.Interaction.KeyPress.WasPressedThisFrame();
+            var escape = _input.Interaction.Escape.WasPressedThisFrame();
+
             if (_hacked == true)
             {
-                if (Input.GetKeyDown(KeyCode.E))
+                if (enterKeyPress)
                 {
                     var previous = _activeCamera;
                     _activeCamera++;
@@ -47,7 +60,7 @@ namespace Game.Scripts.LiveObjects
                     _cameras[previous].Priority = 9;
                 }
 
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (escape)
                 {
                     _hacked = false;
                     onHackEnded?.Invoke();
