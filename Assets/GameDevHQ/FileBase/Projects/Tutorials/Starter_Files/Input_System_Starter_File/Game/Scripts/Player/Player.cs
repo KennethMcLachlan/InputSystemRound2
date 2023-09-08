@@ -74,12 +74,10 @@ namespace Game.Scripts.Player
             var movement = _input.Player.Movement.ReadValue<Vector2>();
 
             _playerGrounded = _controller.isGrounded;
-            //float h = Input.GetAxisRaw("Horizontal");
-            //float v = Input.GetAxisRaw("Vertical");
 
-            transform.Rotate(transform.up, movement.x);  //Replace
+            transform.Rotate(transform.up, movement.x);  
 
-            var direction = transform.forward * movement.y; //Replace
+            var direction = transform.forward * movement.y; 
             var velocity = direction * _speed;
 
 
