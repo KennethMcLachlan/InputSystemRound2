@@ -15,14 +15,46 @@ namespace Game.Scripts.LiveObjects
 
         private List<Rigidbody> _brakeOff = new List<Rigidbody>();
 
+        private PlayerInputAction _input;
+
+        private bool _holdHasStarted;
         private void OnEnable()
         {
             InteractableZone.onZoneInteractionComplete += InteractableZone_onZoneInteractionComplete;
         }
 
+        private void Punch_canceled(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            if (_holdHasStarted == true)
+            {
+                _holdHasStarted = false;
+                BreakPart();
+                StartCoroutine(PunchDelay());
+            }
+
+            Debug.Log("cancelled");
+        }
+
+        private void Punch_performed(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            _holdHasStarted = false;
+            BreakPart();
+            BreakPart();
+            BreakPart();
+            StartCoroutine(PunchDelay());
+
+            Debug.Log("hold performed");
+        }
+
+        private void Punch_started(UnityEngine.InputSystem.InputAction.CallbackContext ocontext)
+        {
+            _holdHasStarted = true;
+
+            Debug.Log("Hold Started");
+        }
+
         private void InteractableZone_onZoneInteractionComplete(InteractableZone zone)
         {
-            
             if (_isReadyToBreak == false && _brakeOff.Count >0)
             {
                 _wholeCrate.SetActive(false);
@@ -34,11 +66,12 @@ namespace Game.Scripts.LiveObjects
             {
                 if (_brakeOff.Count > 0)
                 {
-                    BreakPart();
-                    StartCoroutine(PunchDelay());
+                    _input.Enable();
+                    
                 }
-                else if(_brakeOff.Count == 0)
+                else if(_brakeOff.Count <= 0)
                 {
+                    _holdHasStarted = false;
                     _isReadyToBreak = false;
                     _crateCollider.enabled = false;
                     _interactableZone.CompleteTask(6);
@@ -49,8 +82,13 @@ namespace Game.Scripts.LiveObjects
 
         private void Start()
         {
+            _input = new PlayerInputAction();
+
+            _input.Crate.Punch.started += Punch_started;
+            _input.Crate.Punch.performed += Punch_performed;
+            _input.Crate.Punch.canceled += Punch_canceled;
+
             _brakeOff.AddRange(_pieces);
-            
         }
 
 

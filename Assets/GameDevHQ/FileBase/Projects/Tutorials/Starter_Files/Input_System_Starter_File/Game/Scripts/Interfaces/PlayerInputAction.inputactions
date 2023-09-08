@@ -370,6 +370,34 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Crate",
+            "id": "7d37792e-1e93-4bd7-817a-bb9e97ec4b8b",
+            "actions": [
+                {
+                    "name": "Punch",
+                    "type": "Button",
+                    "id": "554b7b93-ea7f-4cab-bc6a-c3a3ded9512d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c0c907de-015b-4cfa-8e27-38b43202b3f1",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "Hold(duration=1,pressPoint=0.1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Punch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
