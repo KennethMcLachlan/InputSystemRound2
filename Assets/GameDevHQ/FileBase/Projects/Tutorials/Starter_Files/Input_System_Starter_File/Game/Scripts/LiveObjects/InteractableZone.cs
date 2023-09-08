@@ -83,8 +83,6 @@ namespace Game.Scripts.LiveObjects
 
         private void OnTriggerEnter(Collider other)
         {
-            //var keyPress = _input.Interaction.KeyPress.WasPressedThisFrame();
-
             var keyPress = _input.Interaction.KeyPress.GetBindingDisplayString();
 
             if (other.CompareTag("Player") && _currentZoneID > _requiredID)
@@ -140,7 +138,6 @@ namespace Game.Scripts.LiveObjects
 
             if (_inZone == true)
             {
-
                 if (keyPress && _keyState != KeyState.PressHold)
                 {
                     //press
@@ -169,8 +166,6 @@ namespace Game.Scripts.LiveObjects
                 {
                     _inHoldState = true;
 
-                   
-
                     switch (_zoneType)
                     {                      
                         case ZoneType.HoldAction:
@@ -184,8 +179,6 @@ namespace Game.Scripts.LiveObjects
                     _inHoldState = false;
                     onHoldEnded?.Invoke(_zoneID);
                 }
-
-               
             }
         }
        

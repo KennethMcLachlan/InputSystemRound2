@@ -95,13 +95,13 @@ namespace Game.Scripts.LiveObjects
 
         private void CalculateMovementUpdate()
         {
-            if (_rotate < 0) //Replace / rotateddd
+            if (_rotate < 0)
             {
                 var tempRot = transform.localRotation.eulerAngles;
                 tempRot.y -= _speed / 3;
                 transform.localRotation = Quaternion.Euler(tempRot);
             }
-            if (_rotate > 0) // Replace / rotateddd
+            if (_rotate > 0)
             {
                 var tempRot = transform.localRotation.eulerAngles;
                 tempRot.y += _speed / 3;
@@ -112,11 +112,11 @@ namespace Game.Scripts.LiveObjects
         private void CalculateMovementFixedUpdate()
         {
             
-            if (_movement.y > 0) // Replaced
+            if (_movement.y > 0)
             {
                 _rigidbody.AddForce(transform.up * _speed, ForceMode.Acceleration);
             }
-            if (_movement.y < 0) // Replaced
+            if (_movement.y < 0)
             {
                 _rigidbody.AddForce(-transform.up * _speed, ForceMode.Acceleration);
             }
@@ -124,13 +124,13 @@ namespace Game.Scripts.LiveObjects
 
         private void CalculateTilt()
         {
-            if (_movement.x < 0) //REplaced
+            if (_movement.x < 0)
                 transform.rotation = Quaternion.Euler(00, transform.localRotation.eulerAngles.y, 30);
-            else if (_movement.x > 0) // Replaced
+            else if (_movement.x > 0)
                 transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, -30);
-            else if (_movement.z > 0) // Replaced
+            else if (_movement.z > 0)
                 transform.rotation = Quaternion.Euler(30, transform.localRotation.eulerAngles.y, 0);
-            else if (_movement.z < 0) //Replaced
+            else if (_movement.z < 0)
                 transform.rotation = Quaternion.Euler(-30, transform.localRotation.eulerAngles.y, 0);
             else 
                 transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0);

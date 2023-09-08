@@ -79,14 +79,12 @@ namespace Game.Scripts.LiveObjects
 
         private void CalcutateMovement()
         {
-            float h = Input.GetAxisRaw("Horizontal"); //Replace
-            float v = Input.GetAxisRaw("Vertical"); //Replace
-            var direction = new Vector3(0, 0, _movement.y); //Replace
+            var direction = new Vector3(0, 0, _movement.y);
             var velocity = direction * _speed;
 
             transform.Translate(velocity * Time.deltaTime);
 
-            if (Mathf.Abs(_movement.y) > 0) //Replace
+            if (Mathf.Abs(_movement.y) > 0)
             {
                 var tempRot = transform.rotation.eulerAngles;
                 tempRot.y += _movement.x * _speed / 2;
@@ -96,9 +94,9 @@ namespace Game.Scripts.LiveObjects
 
         private void LiftControls()
         {
-            if (_liftInput > 0) //Replace 1D
+            if (_liftInput > 0)
                 LiftUpRoutine();
-            else if (_liftInput < 0) //REplace
+            else if (_liftInput < 0)
                 LiftDownRoutine();
         }
 
