@@ -22,6 +22,10 @@ namespace Game.Scripts.Player
         [SerializeField]
         private GameObject _model;
 
+        private PlayerInputAction _input;
+
+        private Vector2 _movement;
+
 
         private void OnEnable()
         {
@@ -37,6 +41,10 @@ namespace Game.Scripts.Player
 
         private void Start()
         {
+            _input = new PlayerInputAction();
+            _input.Enable();
+            _input.Player.Movement.performed += Movement_performed;
+
             _controller = GetComponent<CharacterController>();
 
             if (_controller == null)
@@ -48,6 +56,11 @@ namespace Game.Scripts.Player
                 Debug.Log("Failed to connect the Animator");
         }
 
+        private void Movement_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            //Movement
+        }
+
         private void Update()
         {
             if (_canMove == true)
@@ -57,13 +70,16 @@ namespace Game.Scripts.Player
 
         private void CalcutateMovement()
         {
+
+            var movement = _input.Player.Movement.ReadValue<Vector2>();
+
             _playerGrounded = _controller.isGrounded;
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
+            //float h = Input.GetAxisRaw("Horizontal");
+            //float v = Input.GetAxisRaw("Vertical");
 
-            transform.Rotate(transform.up, h);
+            transform.Rotate(transform.up, movement.x);  //Replace
 
-            var direction = transform.forward * v;
+            var direction = transform.forward * movement.y; //Replace
             var velocity = direction * _speed;
 
 
